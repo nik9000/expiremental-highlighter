@@ -1,8 +1,14 @@
-Expiremental Highlighter [![Build Status](https://travis-ci.org/nik9000/expiremental-highlighter.svg?branch=master)](https://travis-ci.org/nik9000/expiremental-highlighter)
+Experimental Highlighter
 ========================
 
+This project has [moved](https://github.com/wikimedia/search-highlighter).
+Sorry for the inconvenience.  I'm leaving this tombstone here, spelling
+mistakes and all so folks can find the new repository.
+
+Old Readme
+----------
 Text highlighter for Java designed to be pluggable enough for easy
-expirementation.  The idea being that it should be possible to play with how
+experimentation.  The idea being that it should be possible to play with how
 hits are weighed or how they are grouped into snippets without knowing about
 the guts of Lucene or Elasticsearch.
 
@@ -30,20 +36,13 @@ This highlighter does not (currently):
 Elasticsearch installation
 --------------------------
 
-| Expiremental Highlighter Plugin |  ElasticSearch  |
+| Experimental Highlighter Plugin |  ElasticSearch  |
 |---------------------------------|-----------------|
 | master                          | 1.1.0 -> master |
 
-At this point nothing has been pushed to Elasticsearch's plugin repository so
-you have to clone the plugin locally, build it by going to the cloned directory
-and
+Install it like so:
 ```bash
-mvn clean package
-export ABSOLUTE_PATH_OF_CLONED_DIRECTORY=$(pwd)
-```
-then install by going to the root of the Elasticsearch installation and
-```bash
-./bin/plugin --url file:///$ABSOLUTE_PATH_OF_CLONED_DIRECTORY/expiremental-highlighter-elasticsearch-plugin/target/releases/expiremental-highlighter-elasticsearch-plugin-0.0.1-SNAPSHOT.zip  --install expiremental-highlighter-elasticsearch-plugin 
+./bin/plugin --install org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/0.0.1
 ```
 
 Then you can use it by searching like so:
@@ -60,7 +59,7 @@ Then you can use it by searching like so:
     "fields": {
       "title": {
         "number_of_fragments": 1,
-        "type": "expiremental"
+        "type": "experimental"
       }
     }
   }
@@ -79,7 +78,7 @@ fragment between each value, even on ```none```.  Example:
   "highlight": {
     "fields": {
       "title": {
-        "type": "expiremental",
+        "type": "experimental",
         "fragmenter": "sentence",
         "options": {
           "locale": "en_us"
@@ -101,7 +100,7 @@ order.  Example:
   "highlight": {
     "fields": {
       "text": {
-        "type": "expiremental",
+        "type": "experimental",
         "number_of_fragments": 2,
         "fragmenter": "sentence",
         "sort": "source",
@@ -123,7 +122,7 @@ query it will never be used.
   "highlight": {
     "fields": {
       "title": {
-        "type": "expiremental",
+        "type": "experimental",
         "options": {
           "default_similarity": false
         }
@@ -142,7 +141,7 @@ to using the first option that wouldn't throw an error.
   "highlight": {
     "fields": {
       "title": {
-        "type": "expiremental",
+        "type": "experimental",
         "options": {
           "hit_source": "analyze"
         }
@@ -158,7 +157,8 @@ example, this will multiply the weight of matches before the 20th position by
   "highlight": {
     "fields": {
       "title": {
-        "type": "expiremental",
+        "type": "experimental",
+        "order": "score",
         "options": {
           "boost_before": {
             "20": 5,
@@ -171,6 +171,7 @@ example, this will multiply the weight of matches before the 20th position by
 ```
 Note that the position is not reset between multiple values of the same field
 but is handled independently for each of the ```matched_fields```.
+Note also that ```boost_before``` works with ```top_scoring```.
 
 The ```matched_fields``` field turns on combining matches from multiple fields,
 just like the Fast Vector Highlighter.  See the [Elasticsearch documentation](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-request-highlighting.html#matched-fields)
